@@ -40,33 +40,25 @@ public class ProfileFormTest {
 
     @Test(description = "Позитивный сценарий — корректное заполнение всех полей")
     public void testSubmitProfileFormAndVerifyTableEntry() {
-        String email = "test2@protei.ru";
-        String name = "Анна";
-        String gender = "Женский";
-        boolean check11 = true;
-        boolean check12 = false;
-        String option2 = "2.2";
 
         profilePage
-                .setEmail(email)
-                .setName(name)
-                .selectGender(gender)
-                .checkOption11(check11)
-                .checkOption12(check12)
-                .selectOption2(option2)
+                .setEmail(ProfileFormConstants.EMAIL)
+                .setName(ProfileFormConstants.NAME)
+                .selectGender(ProfileFormConstants.GENDER)
+                .checkOption11(ProfileFormConstants.OPTION1_1)
+                .checkOption12(ProfileFormConstants.OPTION1_2)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
-
-        String expectedChoice1 = "1.1";
 
         List<WebElement> rows = profilePage.getAllRows();
         Assert.assertFalse(rows.isEmpty(), "Строка должна быть добавлена в таблицу");
 
         List<WebElement> cells = profilePage.getCells(rows.getFirst());
-        Assert.assertEquals(cells.get(0).getText(), email);
-        Assert.assertEquals(cells.get(1).getText(), name);
-        Assert.assertEquals(cells.get(2).getText(), gender);
-        Assert.assertEquals(cells.get(3).getText(), expectedChoice1);
-        Assert.assertEquals(cells.get(4).getText(), option2);
+        Assert.assertEquals(cells.get(0).getText(), ProfileFormConstants.EMAIL);
+        Assert.assertEquals(cells.get(1).getText(), ProfileFormConstants.NAME);
+        Assert.assertEquals(cells.get(2).getText(), ProfileFormConstants.GENDER);
+        Assert.assertEquals(cells.get(3).getText(), ProfileFormConstants.OPTION1_1);
+        Assert.assertEquals(cells.get(4).getText(), ProfileFormConstants.OPTION2);
     }
 
     @Test(description = "Минимально валидный ввод — только обязательные поля")
@@ -75,8 +67,8 @@ public class ProfileFormTest {
                 .setEmail(ProfileFormConstants.EMAIL)
                 .setName(ProfileFormConstants.NAME)
                 .selectGender(ProfileFormConstants.GENDER)
-                .checkOption11(false)
-                .checkOption12(false)
+                .checkOption11(!ProfileFormConstants.OPTION1_1)
+                .checkOption12(!ProfileFormConstants.OPTION1_2)
                 .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
@@ -175,24 +167,21 @@ public class ProfileFormTest {
     }
 
     @Test(description = "Негативный сценарий — попытка добавить пользователя с уже существующим email")
-    public void testDuplicateEmailNotAllowed() {
-        String existingEmail = "existing@protei.ru";
-        String name1 = "Первый";
-        String name2 = "Второй";
+    public void testDuplicateEmailNotAllowed() {;
 
         profilePage
-                .setEmail(existingEmail)
-                .setName(name1)
-                .selectGender("Мужской")
-                .selectOption2("2.1")
+                .setEmail(ProfileFormConstants.EMAIL)
+                .setName(ProfileFormConstants.NAME)
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm()
                 .clickAlertButton();
 
         profilePage
-                .setEmail(existingEmail)
-                .setName(name2)
-                .selectGender("Женский")
-                .selectOption2("2.2")
+                .setEmail(ProfileFormConstants.EMAIL)
+                .setName(ProfileFormConstants.NAME)
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
         Assert.assertTrue(
@@ -202,50 +191,77 @@ public class ProfileFormTest {
 
         List<WebElement> rows = profilePage.getAllRows();
         Assert.assertEquals(rows.size(), 1, "В таблице должна остаться только одна запись");
-        Assert.assertEquals(profilePage.getCells(rows.getFirst()).get(1).getText(), name1, "Имя должно быть первого пользователя");
+        Assert.assertEquals(profilePage.getCells(rows.getFirst()).get(1).getText(), ProfileFormConstants.NAME, "Имя должно быть первого пользователя");
     }
 
     @Test(description = "Граничный сценарий — email с пробелами до и после")
     public void testEmailWithWhitespace() {
-        String emailWithSpaces = "        spaced@protei.ru  ";
-        String cleanEmail = "spaced@protei.ru";
-        String name = "С пробелами";
+        String emailWithSpaces = "        "+ProfileFormConstants.EMAIL+"  ";
 
         profilePage
                 .setEmail(emailWithSpaces)
-                .setName(name)
-                .selectGender("Женский")
-                .selectOption2("2.1")
+                .setName(ProfileFormConstants.NAME)
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
-
         List<WebElement> lastRow = profilePage.getLastRow();
         List<WebElement> cells = profilePage.getCells(lastRow.getFirst());
 
-        Assert.assertEquals(cells.getFirst().getText(), cleanEmail, "Email должен быть без пробелов по краям");
+        Assert.assertEquals(cells.getFirst().getText(), ProfileFormConstants.EMAIL, "Email должен быть без пробелов по краям");
     }
 
-    @Test(description = "Граничный сценарий — имя с разрешёнными специальными символами")
+    @Test(description = "Граничный сценарий — имя с неразрешёнными специальными символами")
     public void testNameWithSpecialCharacters() {
-        String name = "Анна-Мария (Иванова) №?*:%123";
-        String email = "special@protei.ru";
+        String name = "Анна№?*:%123";
 
         profilePage
-                .setEmail(email)
+                .setEmail(ProfileFormConstants.EMAIL)
                 .setName(name)
-                .selectGender("Женский")
-                .selectOption2("2.3")
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
         Assert.assertTrue(profilePage.isAlertDisplayed("Имя содержит спецсимволы"));
     }
 
-    @Test(description = "Проверка уникальности email без учёта регистра")
-    public void testEmailCaseInsensitive() {
-        String emailLower = "case@protei.ru";
-        String emailUpper = "CASE@protei.ru";
+    @Test(description = "Граничный сценарий — имя с разрешёнными специальными символами")
+    public void testNameWithAllowedSpecialCharacters() {
+        String name = "Анна_-№123";
 
         profilePage
-                .setEmail(emailLower)
+                .setEmail(ProfileFormConstants.EMAIL)
+                .setName(name)
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
+                .submitForm();
+
+        List<WebElement> rows = profilePage.getAllRows();
+
+        Assert.assertEquals(rows.size(), 1, "В таблице должна появится запись");
+    }
+
+    @Test(description = "Граничный сценарий — имя с пробелами")
+    public void testNameWitheSpaceBetweenWords() {
+        String name = "Анна Кульга";
+
+        profilePage
+                .setEmail(ProfileFormConstants.EMAIL)
+                .setName(name)
+                .selectGender(ProfileFormConstants.GENDER)
+                .selectOption2(ProfileFormConstants.OPTION2)
+                .submitForm();
+
+        Assert.assertTrue(profilePage.isAlertDisplayed("Имя содержит пробел"));
+    }
+
+
+    @Test(description = "Проверка уникальности email без учёта регистра")
+    public void testEmailCaseInsensitive() {
+
+        String emailUpper = ProfileFormConstants.EMAIL.toUpperCase();
+
+        profilePage
+                .setEmail(ProfileFormConstants.EMAIL)
                 .setName("Нижний")
                 .selectGender("Мужской")
                 .selectOption2("2.1")
@@ -298,7 +314,7 @@ public class ProfileFormTest {
                 .setEmail(ProfileFormConstants.EMAIL)
                 .setName("")
                 .selectGender(ProfileFormConstants.GENDER)
-                .selectOption2("2.3")
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
         Assert.assertTrue(profilePage.isAlertDisplayed("Поле имя не может быть пустым"), "Должно появиться сообщение об ошибке поля Имя");
@@ -316,7 +332,7 @@ public class ProfileFormTest {
         Assert.assertTrue(profilePage.isAlertDisplayed("Выберите пол"), "Должно появиться сообщение о незаполненном поле Пол");
     }
 
-    @Test(description = "Edge-case — длинное имя и email")
+    @Test(description = "Граничный случай — длинное имя и email")
     public void testLongInputValues() {
         String longEmail = "user_very_long_email_address_over_100_chars_" + System.currentTimeMillis() + "@protei.ru";
         String longName = "user_very_long ".repeat(50);
@@ -324,9 +340,9 @@ public class ProfileFormTest {
         profilePage
                 .setEmail(longEmail)
                 .setName(longName)
-                .selectGender("Женский")
-                .checkOption11(true)
-                .selectOption2("2.1")
+                .selectGender(ProfileFormConstants.GENDER)
+                .checkOption11(ProfileFormConstants.OPTION1_1)
+                .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
         List<WebElement> lastRow = profilePage.getLastRow();
@@ -340,11 +356,11 @@ public class ProfileFormTest {
     public void testMultipleSubmissions() {
         for (int i = 0; i < 3; i++) {
             profilePage
-                    .setEmail("multi" + i + "@protei.ru")
-                    .setName("User" + i)
-                    .selectGender("Мужской")
-                    .checkOption11(i % 2 == 0)
-                    .selectOption2("2.2")
+                    .setEmail("user" + i + "@protei.ru")
+                    .setName(ProfileFormConstants.NAME + i)
+                    .selectGender(ProfileFormConstants.GENDER)
+                    .checkOption11(ProfileFormConstants.OPTION1_1)
+                    .selectOption2(ProfileFormConstants.OPTION2)
                     .submitForm()
                     .clickAlertButton();
         }
