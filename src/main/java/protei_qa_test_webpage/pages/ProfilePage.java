@@ -77,7 +77,7 @@ public class ProfilePage {
     /**
      * Выбор пола через <select>
      * @param gender "Мужской" или "Женский"
-     * Плохо, что нет значение не выбрано
+     * Плохо, что нет значения по умолчанию - не выбрано
      */
     public ProfilePage selectGender(String gender) {
         WebElement selectElement = DriverFactory.getWait().until(ExpectedConditions.elementToBeClickable(GENDER_SELECT));
