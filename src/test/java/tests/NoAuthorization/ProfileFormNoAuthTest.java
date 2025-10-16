@@ -52,8 +52,8 @@ public class ProfileFormNoAuthTest {
                 .setEmail(ProfileFormConstants.EMAIL)
                 .setName(ProfileFormConstants.NAME)
                 .selectGender(ProfileFormConstants.GENDER)
-                .checkOption11(ProfileFormConstants.Option11)
-                .checkOption12(!ProfileFormConstants.Option12)
+                .checkOption11(ProfileFormConstants.OPTION1_1)
+                .checkOption12(!ProfileFormConstants.OPTION1_2)
                 .selectOption2(ProfileFormConstants.OPTION2)
                 .submitForm();
 
