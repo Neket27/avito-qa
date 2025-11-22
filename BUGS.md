@@ -1,5 +1,5 @@
 # BUGS.md  
-**API Endpoint:** `POST https://qa-internship.avito.com/api/1/item`  
+**API Endpoint:** `POST https://qa-internship.avito.com/api/sellerID/item`  
 ---
 
 ## 🚨 КРИТИЧЕСКИЕ БАГИ
