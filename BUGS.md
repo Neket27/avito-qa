@@ -1,5 +1,5 @@
 # BUGS.md  
-**API Endpoint:** `POST https://qa-internship.avito.com/api/sellerID/item`  
+**API Endpoint:** `POST https://qa-internship.avito.com/api/1/item`  
 ---
 
 ## 🚨 КРИТИЧЕСКИЕ БАГИ
@@ -43,7 +43,7 @@
 | `statistics.contacts` | `long` | `≥ 1`                                            | `"поле contacts должно быть целым числом ≥ 1"`                    |
 
 
-**API Endpoint:** `GET https://qa-internship.avito.com/api/1/item/{id}`  
+**API Endpoint:** `GET https://qa-internship.avito.com/api/1/sellerID/item`  
 ---
 
 ## 🚨 КРИТИЧЕСКИЕ БАГИ
