@@ -59,7 +59,7 @@
 **API Endpoint:** `GET https://qa-internship.avito.com/api/1/sellerID/item`
 **Цель:** Проверка получения данных по id.
 
-### Тест-кейсы: `GET /ad/{id}` — получение объявления по идентификатору
+### Тест-кейсы: `GET https://qa-internship.avito.com/api/1/sellerID/item` — получение объявлений по идентификатору продовца
 
 ---
 
