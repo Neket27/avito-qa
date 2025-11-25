@@ -5,8 +5,7 @@
 - Установите **[Gradle]
 
 ## 2. Клонирование проекта
-```bash
-[git clone ](https://github.com/Neket27/avito-qa.git)
+git clone (https://github.com/Neket27/avito-qa.git)
 cd QA/avito
 
 3. Запуск тестов
