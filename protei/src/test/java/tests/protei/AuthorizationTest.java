@@ -1,4 +1,4 @@
-package tests;
+package tests.protei;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;

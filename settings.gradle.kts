@@ -1,1 +1,3 @@
-rootProject.name = "protei_qa_test_webpage"
+rootProject.name = "qa_test"
+include("protei")
+include("avito")
