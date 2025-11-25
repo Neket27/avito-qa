@@ -1,4 +1,4 @@
-package tests.WithAuthorization;
+package tests.protei.WithAuthorization;
 
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;

@@ -1,4 +1,4 @@
-package tests.NoAuthorization;
+package tests.protei;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;

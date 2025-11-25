@@ -2,17 +2,15 @@ plugins {
     id("java")
 }
 
-group = "protei_qa_test_webpage"
-version = "1.0-SNAPSHOT"
+group = "qa"
+version = "1.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.seleniumhq.selenium:selenium-java:4.25.0")
-    implementation("io.github.bonigarcia:webdrivermanager:5.9.2")
-    testImplementation("org.testng:testng:7.10.2")
+
 }
 
 tasks.test {
